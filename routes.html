@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>KUBGTU LOGISTICS — Маршруты и решения</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Маршруты и решения KUBGTU LOGISTICS по перевозкам грузов по странам СНГ." />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f5f7fc;
+      --bg-alt: #ffffff;
+      --accent: #1e6fff;
+      --accent-soft: #e3eeff;
+      --accent-strong: #0053d6;
+      --text-main: #10233d;
+      --text-muted: #6b7a93;
+      --border: #d7e0f3;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-soft: 0 12px 30px rgba(15, 38, 70, 0.12);
+      --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition-fast: 0.18s ease-out;
+      --transition-med: 0.25s ease-out;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(248, 250, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(215, 224, 243, 0.8);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #49a6ff, #79d5ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 16px;
+      box-shadow: 0 6px 18px rgba(0, 87, 214, 0.35);
+    }
+
+    .logo-text-main {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .logo-text-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav a {
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 11px;
+      padding-bottom: 2px;
+      border-bottom: 2px solid transparent;
+      transition: color var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .nav a:hover {
+      color: var(--accent);
+      border-color: rgba(30, 111, 255, 0.6);
+    }
+
+    .nav .active {
+      color: var(--accent-strong);
+      border-color: var(--accent-strong);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .header-tg {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .btn-ghost {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent-strong);
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-ghost:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      box-shadow: 0 6px 16px rgba(22, 94, 206, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: none;
+      font-size: 13px;
+      font-weight: 500;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: box-shadow var(--transition-med), transform var(--transition-med), filter var(--transition-med);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 10px 24px rgba(0, 83, 214, 0.35);
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    .btn-secondary {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent-strong);
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-secondary:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      box-shadow: 0 6px 18px rgba(19, 73, 160, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .btn-icon-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--accent-strong);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    main { padding-bottom: 56px; }
+
+    .hero {
+      padding: 48px 0 36px;
+      background: linear-gradient(180deg, #eaf1ff 0, #f5f7fc 40%, #f5f7fc 100%);
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .hero-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .hero-title {
+      margin: 14px 0 10px;
+      font-size: clamp(26px, 3.6vw, 32px);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-title span {
+      color: var(--accent-strong);
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 480px;
+      line-height: 1.5;
+    }
+
+    .hero-list {
+      margin: 14px 0 0;
+      padding-left: 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .hero-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 16px;
+    }
+
+    .hero-image-wrap {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+
+    .hero-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .hero-card-text {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    section { padding: 40px 0; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .section-description {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 380px;
+    }
+
+    .card {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 18px 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .card-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .routes-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .routes-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .matrix-item {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 8px 9px;
+      background: #ffffff;
+    }
+
+    .matrix-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    .matrix-value {
+      font-size: 13px;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    /* Contact */
+    .contact-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 16px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr);
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .contact-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .contact-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f8faff;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .contact-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .contact-note strong {
+      color: var(--accent-strong);
+    }
+
+    .contact-template {
+      background: #f9fbff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .template-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .template-field {
+      margin-bottom: 6px;
+    }
+
+    .template-field-title {
+      font-size: 11px;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .template-field-body {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 6px 7px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-style: italic;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      background: #f8faff;
+      padding: 14px 0 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer-right a {
+      color: var(--text-muted);
+      transition: color var(--transition-fast);
+    }
+
+    .footer-right a:hover {
+      color: var(--accent-strong);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-inner,
+      .routes-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        padding-top: 36px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-right {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-primary,
+      .btn-secondary {
+        justify-content: center;
+        width: 100%;
+      }
+      .matrix {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body id="top">
+  <!-- Шапка -->
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="logo">
+          <div class="logo-mark">K</div>
+          <div>
+            <div class="logo-text-main">KUBGTU LOGISTICS</div>
+            <div class="logo-text-sub">CIS FREIGHT NETWORK</div>
+          </div>
+        </a>
+
+        <nav class="nav">
+          <a href="index.html">Главная</a>
+          <a href="#top" class="active">Маршруты</a>
+          <a href="#contact">Контакты</a>
+        </nav>
+
+        <div class="header-right">
+          <span class="header-tg">t.me/kubgtu_logistic</span>
+          <a class="btn-ghost" href="https://t.me/kubgtu_logistic" target="_blank" rel="noopener">
+            <span class="btn-icon-circle">TG</span>
+            Telegram
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO (самолёт №2 — другая картинка) -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+          <div>
+            <div class="hero-tag">
+              <span class="hero-dot"></span>
+              Маршруты и решения KUBGTU
+            </div>
+            <h1 class="hero-title">
+              Логистические цепочки <span>под ваши поставки</span>
+            </h1>
+            <p class="hero-subtitle">
+              Сочетаем автоперевозки, железнодорожную и, при необходимости, авиадоставку, чтобы обеспечить нужные сроки и стабильность цепочки.
+            </p>
+            <ul class="hero-list">
+              <li>Фиксированные магистральные линии по СНГ.</li>
+              <li>Индивидуальные маршруты под ваш график отгрузок.</li>
+              <li>Единый менеджер и прозрачные SLA по срокам.</li>
+            </ul>
+
+            <div class="hero-actions">
+              <a class="btn-primary" href="#contact">
+                Обсудить маршрут
+              </a>
+              <a class="btn-secondary" href="https://t.me/kubgtu_logistic" target="_blank" rel="noopener">
+                <span class="btn-icon-circle">TG</span>
+                Написать в Telegram
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <div class="hero-card">
+              <div class="hero-image-wrap">
+                <!-- Самолёт №2 (локальный файл) -->
+                <img
+                  src="img/hero-plane-2.jpg"
+                  alt="Самолёт при посадке над полосой"
+                  loading="lazy"
+                >
+              </div>
+              <div class="hero-card-title">Гибкие маршруты</div>
+              <div class="hero-card-text">
+                Для срочных и удалённых направлений подключаем авиаплечи и мультимодальные схемы, сохраняя единый контроль и отчётность по всей цепочке.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Маршруты и типы перевозок -->
+    <section>
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Маршруты и сервис</div>
+          </div>
+          <div class="section-description">
+            Оптимизируем маршруты и тип транспорта под ваш тип груза, регулярность и требования к срокам.
+          </div>
+        </div>
+
+        <div class="routes-grid">
+          <div class="card">
+            <div class="card-title">Основные коридоры</div>
+            <div class="card-text">
+              <ul class="routes-list">
+                <li>Россия → Казахстан / Казахстан → Россия;</li>
+                <li>Россия → Беларусь / Беларусь → Россия;</li>
+                <li>Россия → Узбекистан и другие страны Средней Азии;</li>
+                <li>Маршруты между странами СНГ через российские хабы.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Формат работы</div>
+            <div class="card-text">
+              <div class="matrix">
+                <div class="matrix-item">
+                  <div class="matrix-label">тип груза</div>
+                  <div class="matrix-value">Промышленный, FMCG, оборудование</div>
+                </div>
+                <div class="matrix-item">
+                  <div class="matrix-label">формат</div>
+                  <div class="matrix-value">FTL / LTL, сборные партии</div>
+                </div>
+                <div class="matrix-item">
+                  <div class="matrix-label">частота</div>
+                  <div class="matrix-value">Разовые и регулярные рейсы</div>
+                </div>
+                <div class="matrix-item">
+                  <div class="matrix-label">сроки</div>
+                  <div class="matrix-value">Под конкретный маршрут и SLA</div>
+                </div>
+              </div>
+              <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
+                Под ваши объёмы можем выстроить выделенную линию и закрепить слот под регулярные отгрузки.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contact">
+      <div class="container">
+        <div class="contact-card">
+          <div class="contact-grid">
+            <div>
+              <div class="contact-title">Запрос маршрута</div>
+              <div class="contact-text">
+                Напишите параметры груза и направление — подберём оптимальный маршрут и формат перевозки.
+              </div>
+              <div class="badge-row">
+                <div class="badge">Авто · мультимодальные</div>
+                <div class="badge">СНГ и сопредельные страны</div>
+              </div>
+
+              <div class="hero-actions" style="margin-bottom: 4px;">
+                <!-- КНОПКА ДЛЯ БОТА (замените URL, если у бота другое имя) -->
+                <a class="btn-primary" href="https://t.me/kubgtu_logistic_bot" target="_blank" rel="noopener">
+                  <span class="btn-icon-circle">BOT</span>
+                  Оставить заявку боту
+                </a>
+
+                <!-- Кнопка на живого менеджера -->
+                <a class="btn-secondary" href="https://t.me/kubgtu_logistic" target="_blank" rel="noopener">
+                  <span class="btn-icon-circle">TG</span>
+                  Написать менеджеру
+                </a>
+
+                <!-- Наверх страницы -->
+                <a class="btn-secondary" href="#top">
+                  Наверх страницы
+                </a>
+              </div>
+
+              <div class="contact-note">
+                Менеджер: <strong>@kubgtu_logistic</strong><br>
+                Бот для заявок: <strong>@kubgtu_logistic_bot</strong>
+              </div>
+            </div>
+
+            <div>
+              <div class="contact-template">
+                <div class="template-label">Шаблон запроса</div>
+                <div class="template-field">
+                  <div class="template-field-title">Тип груза</div>
+                  <div class="template-field-body">Например: оборудование / FMCG…</div>
+                </div>
+                <div class="template-field">
+                  <div class="template-field-title">Объём и вес</div>
+                  <div class="template-field-body">Например: 33 паллеты / 20 тонн</div>
+                </div>
+                <div class="template-field">
+                  <div class="template-field-title">Маршрут</div>
+                  <div class="template-field-body">Город/страна отправления → город/страна назначения</div>
+                </div>
+                <div class="template-field">
+                  <div class="template-field-title">Периодичность</div>
+                  <div class="template-field-body">Разовая отправка или регулярные рейсы</div>
+                </div>
+                <div class="contact-note" style="margin-top: 8px;">
+                  Скопируйте текст, дополните своими данными и отправьте в <strong>бота</strong> или напрямую менеджеру.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <span class="footer-dot"></span>
+          <span>KUBGTU LOGISTICS · Маршруты по странам СНГ</span>
+        </div>
+        <div class="footer-right">
+          <span>© 2025 KUBGTU</span>
+          <span>·</span>
+          <a href="#top">В начало</a>
+          <span>·</span>
+          <a href="https://t.me/kubgtu_logistic" target="_blank" rel="noopener">Telegram</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
